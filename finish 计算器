@@ -1,0 +1,141 @@
+#include<stdio.h>
+#include<stdlib.h>
+char*getOperand(char* p,double* pnum);
+char* getOperand(char*p,double*pnum)
+{
+	char buffer[20];
+	int i=0;
+	while(*p>='0'&&*p<='9'||*p=='.')
+	{
+		buffer[i++]=*p++;
+	}
+	buffer[i]='\0';
+	*pnum=atof(buffer);
+	return p;
+}
+
+int main()
+{
+	char exp[]="1.625+3.5*6.5/2.0-3.0";
+	char * p=exp,op[20];
+	int i=0,j=0,k=0;
+	double temp,num[20],result;
+	while(*p != '\0')
+	{
+		if(*p >= '0' && *p <= '9')
+		{
+			p = getOperand(p,&temp);
+			num[j++] = temp;
+			continue;
+		}
+		else if(*p =='+'||*p=='-')
+		{
+			op[k++]=*p;
+		}
+		else if(*p=='*')
+		{
+			p=getOperand(++p,&temp);
+			num[j-1]*=temp;
+			continue;
+		}
+		else if(*p=='/')
+		{
+			p=getOperand(++p,&temp);
+			num[j-1]/=temp;
+			continue;
+		}
+		p++;
+	}
+	result=num[0];
+	for(i=0;i<k;i++)
+	{
+		switch(op[i])
+		{
+			case '+': result +=num[i+1];
+						break;
+			case '-': result -=num[i+1];
+						break;
+		}
+	}
+	printf("result:%.2lf\n",result);
+	return 0;
+}
+
+/*#include <stdio.h>
+#include <stdlib.h>
+//获取一个操作数
+char * getOperand(char *p,double *pnum)
+{
+	char buffer[100];
+	int i=0;
+	while(*p>='0'&&*p<='9'||*p=='.')
+	{
+		buffer[i++]=*p;
+		i++;
+		p++;
+	}
+	buffer[i++]='\0';
+	*pnum=atof(buffer);
+	return p;
+}
+
+double compute(double n1,double n2,char op)
+{
+	switch(op)
+	{
+	case '+':
+		return n1+n2;
+	case '-':
+		return n1-n2;
+	case '*':
+		return n1*n2;
+	case '/':
+		return n1/n2;
+	}
+}
+
+int main()
+{
+	char exp[100]="10.2/5.1+1-2.5*4";
+	char *p=exp;
+	char buffer[20],b[20],op[20],t;
+	double num[20],temp;
+	int i=0,j=0,k=0;
+
+	while(*p!='\0')
+	{
+		if(*p>='0'&&*p<='9')
+		{
+			p = getOperand(p,&temp);
+			num[i++] = temp;
+			if(*p=='\0')
+			{
+				break;
+			}
+		}
+		
+		if(*p=='+'||*p=='-')
+		{
+			op[k++] = *p;
+		}
+		else if(*p=='*'||*p=='/')
+		{
+			t=*p;
+			p++;
+			p = getOperand(p,&temp);
+			//*前面一个操作数:num[i-1]  
+		    num[i-1] = compute(num[i-1],temp,t);
+			continue;
+		}
+		p++;
+	}
+	op[k] = '\0';
+	double result=num[0];
+	for(k=0;op[k];k++)
+	{
+		result=compute(result,num[k+1],op[k]);
+	}
+   printf("%f\n",result);
+	return 0;
+}
+*/
